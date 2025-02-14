@@ -4,73 +4,79 @@ const express = require('express');
 const axios = require('axios');
 const mongoose = require('mongoose');
 const Dialogue = require('./models/MovieScript');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { generateEmbedding } = require('./utils/embeddings');
 
 const app = express();
 app.use(express.json());
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Database connected successfully'))
-  .catch(err => console.error('Database connection failed:', err));
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-app.get('/check', (req, res) => {
-  res.json({ message: 'Server is running' });
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI, {
+  retryWrites: true,
+  w: 'majority'
+})
+.then(() => console.log('Connected to MongoDB Atlas'))
+.catch(err => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1);
 });
 
 app.post('/chat', async (req, res) => {
   const { character, movie, user_message } = req.body;
   
   try {
-    // First try to find relevant dialogue from database
-    const relevantDialogue = await Dialogue.findOne({
-      character: new RegExp(character, 'i'),
-      movie: new RegExp(movie, 'i'),
-      dialogue: new RegExp(user_message.split(' ').join('|'), 'i')
-    });
+    const queryEmbedding = await generateEmbedding(user_message);
 
-    if (relevantDialogue) {
-      // Return actual movie dialogue if found
-      return res.json({
-        message: relevantDialogue.dialogue,
-        character: character,
-        source: 'movie_script from db'
-      });
-    }
-
-    // Fallback to Gemini API if no relevant dialogue found
-    const prompt = `Act as ${character} from the movie "${movie}". Stay in character and respond in their unique style, tone, and personality. Here is what the user says: "${user_message}". Your reply should be authentic to the character and fit the movie's context.`;
-    
-    const response = await axios.post(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+    const relevantDialogues = await Dialogue.aggregate([
       {
-        contents: [{
-          parts: [{
-            text: prompt
-          }]
-        }],
-        generationConfig: {
-          maxOutputTokens: 100,
-          temperature: 0.7
+        $search: {
+          index: "default",
+          knnBeta: {
+            vector: queryEmbedding,
+            path: "embedding",
+            k: 3
+          }
         }
       },
       {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        params: {
-          key: process.env.GEMINI_API_KEY
+        $match: {
+          character: new RegExp(character, 'i'),
+          movie: new RegExp(movie, 'i')
         }
       }
-    );
+    ]).exec();
 
-    const generatedText = response.data.candidates[0].content.parts[0].text;
+    // Context enhancement
+    const context = relevantDialogues
+      .map(d => `${d.character}: ${d.dialogue}`)
+      .join('\n');
+
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    
+    const prompt = `
+Context from movie:
+${context}
+
+You are ${character} from "${movie}". Using the context above and staying in character, respond to: "${user_message}"
+Keep the response concise and authentic to the character's personality.`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+
     res.json({
-      message: generatedText,
+      message: response.text(),
       character: character,
-      source: 'ai'
+      source: relevantDialogues.length > 0 ? 'rag_enhanced' : 'ai_generated',
+      context: relevantDialogues.map(d => ({
+        dialogue: d.dialogue,
+        similarity: d._score
+      }))
     });
+
   } catch (error) {
-    console.error('Error:', error.response?.data || error.message);
+    console.error('Error:', error);
     res.status(500).json({ error: 'Error generating response' });
   }
 });

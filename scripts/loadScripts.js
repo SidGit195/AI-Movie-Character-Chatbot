@@ -11,7 +11,7 @@ async function loadScripts() {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to MongoDB');
 
-    const scripts = JSON.parse(fs.readFileSync(path.join(__dirname, '../movie_scripts_clean.json')));
+    const scripts = JSON.parse(fs.readFileSync(path.join(__dirname, './movie_scripts_clean.json')));
     
     for (const [genre, movies] of Object.entries(scripts.genres)) {
       for (const movie of movies) {
