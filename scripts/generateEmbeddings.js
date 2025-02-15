@@ -1,4 +1,3 @@
-// scripts/generateEmbeddings.js
 require('dotenv').config();
 const mongoose = require('mongoose');
 const { generateEmbedding } = require('../utils/embeddings');
