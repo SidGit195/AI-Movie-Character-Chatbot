@@ -40,10 +40,10 @@ A backend chatbot API using RAG (Retrieval Augmented Generation) with Google's G
 - node -v  # >= 20.x
 
 ### Environment Setup
-GEMINI_API_KEY=your_key
-MONGODB_URI=your_mongodb_uri
-REDIS_URL=your_redis_url
-PORT=3000
+- GEMINI_API_KEY=your_key
+- MONGODB_URI=your_mongodb_uri
+- REDIS_URL=your_redis_url
+- PORT=3000
 
 ### Installation
 1. Clone the repository
