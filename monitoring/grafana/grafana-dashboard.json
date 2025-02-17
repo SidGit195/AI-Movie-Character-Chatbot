@@ -1,0 +1,45 @@
+{
+  "title": "Movie Chatbot Metrics",
+  "panels": [
+    {
+      "title": "Response Time Distribution",
+      "type": "histogram",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(chat_response_time_bucket[5m])"
+        }
+      ]
+    },
+    {
+      "title": "Requests Per Second",
+      "type": "graph",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(chat_requests_total[1m])"
+        }
+      ]
+    },
+    {
+      "title": "Cache Hit Rate",
+      "type": "gauge",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(cache_hits_total[5m]) / rate(chat_requests_total[5m])"
+        }
+      ]
+    },
+    {
+      "title": "Error Rate",
+      "type": "graph",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(errors_total[5m])"
+        }
+      ]
+    }
+  ]
+}
