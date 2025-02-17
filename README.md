@@ -1,22 +1,21 @@
 # 🎬 AI Movie Character Chatbot
 
-A backend chatbot API using RAG (Retrieval Augmented Generation) with Google's Gemini API for more contextually accurate responses.
+A production-ready chatbot API using RAG (Retrieval Augmented Generation) with Google's Gemini API, deployed on Vercel.
 
 ## 🏆 Progress
 - ✅ Level 1: Basic API Chatbot (10 Points) - **COMPLETED**
 - ✅ Level 2: Store & Retrieve Movie Script Data (20 Points) - **COMPLETED**
 - ✅ Level 3: Implement RAG with Vector Search (30 Points) - **COMPLETED**
 - ✅ Level 4: Scale System to Handle High Traffic (40 Points) - **COMPLETED**
-- 📝 Level 5: Optimise for Latency & Deploy
+- ✅ Level 5: Optimise for Latency & Deploy (50 Points) - **COMPLETED**
 
 ## 🛠️ Technologies Used
 - Node.js & Express.js
-- MongoDB Atlas with Vector Search
+- MongoDB Atlas (Vector Search)
 - Google Gemini API for embeddings and text generation
-- Vector similarity search for dialogue matching
 - RAG for context-enhanced responses
-- Redis for caching
-- Rate limiting middleware
+- Redis (Caching)
+- Prometheus & Grafana (Monitoring)
 
 ## 🎯 Key Features
 
@@ -30,14 +29,22 @@ A backend chatbot API using RAG (Retrieval Augmented Generation) with Google's G
 - Rate limiting (5 req/s per user)
 - Horizontal scaling support
 
+### Performance Monitoring
+- Response time tracking
+- Request count metrics
+- Cache hit ratio
+- Error rate monitoring
+- Real-time Grafana dashboards
+
+
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js installed
-- MongoDB Atlas account
-- Google Gemini API key
-- Vector search enabled MongoDB collection
 - node -v  # >= 20.x
+- MongoDB Atlas (Vector Search)
+- Google Gemini API key
+- Redis 
+- Vercel 
 
 ### Environment Setup
 - GEMINI_API_KEY=your_key
