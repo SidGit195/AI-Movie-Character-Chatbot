@@ -1,7 +1,6 @@
 // server.js
 require('dotenv').config();
 const express = require('express');
-const axios = require('axios');
 const mongoose = require('mongoose');
 const Dialogue = require('./models/MovieScript');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
@@ -62,6 +61,10 @@ const metrics = {
 
 // Register metrics
 Object.values(metrics).forEach(metric => register.registerMetric(metric));
+
+app.get('/', (_, res) => {
+  res.send('Welcome to the Chatbot API');
+});
 
 app.post('/chat', async (req, res) => {
   const startTime = process.hrtime();
