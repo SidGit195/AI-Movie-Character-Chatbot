@@ -58,6 +58,10 @@ A production-ready chatbot API using RAG (Retrieval Augmented Generation) with G
 git clone https://github.com/SidGit195/AI-Movie-Character-Chatbot.git
 ```
 
+## 🎥 Demo Video
+Click to watch the demonstration video of project: <a href="https://www.youtube.com/watch?v=QmldLikMrk0" target="_blank" rel="noopener noreferrer">Watch Demo Video</a>
+
+
 ## ScreenShots
 
 ### Level 1 : Basic ChatBot
