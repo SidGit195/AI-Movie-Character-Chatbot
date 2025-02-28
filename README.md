@@ -2,6 +2,9 @@
 
 A production-ready chatbot API using RAG (Retrieval Augmented Generation) with Google's Gemini API, deployed on Vercel.
 
+## 🎥 Demo Video
+Click to watch the demonstration video of project: [https://www.youtube.com/watch?v=QmldLikMrk0](https://www.youtube.com/watch?v=QmldLikMrk0)
+
 ## 🏆 Progress
 - ✅ Level 1: Basic API Chatbot (10 Points) - **COMPLETED**
 - ✅ Level 2: Store & Retrieve Movie Script Data (20 Points) - **COMPLETED**
@@ -57,9 +60,6 @@ A production-ready chatbot API using RAG (Retrieval Augmented Generation) with G
 ```bash
 git clone https://github.com/SidGit195/AI-Movie-Character-Chatbot.git
 ```
-
-## 🎥 Demo Video
-Click to watch the demonstration video of project: [https://www.youtube.com/watch?v=QmldLikMrk0](https://www.youtube.com/watch?v=QmldLikMrk0)
 
 ## ScreenShots
 
