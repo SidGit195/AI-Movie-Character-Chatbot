@@ -9,9 +9,14 @@ const rateLimit = require('express-rate-limit');
 const { redisClient, cache } = require('./utils/redis');
 const promClient = require('prom-client');
 const register = new promClient.Registry();
+const cors = require('cors');
 
 const app = express();
 app.use(express.json());
+
+app.use(cors({
+  origin: '*'
+}))
 
 // Rate limiting middleware
 const limiter = rateLimit({
